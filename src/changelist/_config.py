@@ -46,7 +46,6 @@ def remote_config(gh: Github, org_repo: str, *, rev: str):
         content = ""
     config = tomllib.loads(content)
     config = config.get("tool", {}).get("changelist", {})
-    config = _dereference_ignore_prs_by_username(config)
     return config
 
 
@@ -55,7 +54,6 @@ def local_config(path: Path) -> dict:
     with path.open("rb") as fp:
         config = tomllib.load(fp)
     config = config.get("tool", {}).get("changelist", {})
-    config = _dereference_ignore_prs_by_username(config)
     return config
 
 
@@ -74,4 +72,5 @@ def add_config_defaults(
         if key not in config:
             config[key] = value
             logger.debug("using default config value for %s", key)
+    config = _dereference_ignore_prs_by_username(config)
     return config
