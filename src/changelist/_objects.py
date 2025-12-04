@@ -27,7 +27,7 @@ class ChangeNote:
         *,
         pr_summary_regex: str,
         pr_summary_label_regex: str,
-        ignored_user_logins: tuple[str, ...] = (),
+        ignore_prs_by_username: list[str] | None = None,
     ) -> "set[ChangeNote]":
         """Create a set of notes from pull requests.
 
@@ -41,15 +41,18 @@ class ChangeNote:
         a change that would be described in a single note, this is often not
         the case.
 
-        `ignored_user_logins` is a list of user logins whose pull requests
+        `ignore_prs_by_username` is a list of user logins whose pull requests
         should be excluded from the changelog entirely.
         """
+        if ignore_prs_by_username is None:
+            ignore_prs_by_username = []
+
         pr_summary_regex = re.compile(pr_summary_regex, flags=re.MULTILINE)
         pr_summary_label_regex = re.compile(pr_summary_label_regex)
 
         notes = set()
         for pr in pull_requests:
-            if pr.user and pr.user.login in ignored_user_logins:
+            if pr.user and pr.user.login in ignore_prs_by_username:
                 logger.debug(
                     "skipping PR %s from ignored user %s",
                     pr.html_url,
