@@ -157,6 +157,7 @@ def main(
         pull_requests,
         pr_summary_regex=config["pr_summary_regex"],
         pr_summary_label_regex=config["pr_summary_label_regex"],
+        ignored_user_logins=tuple(config["ignored_user_logins"]),
     )
 
     Formatter = {"md": MdFormatter, "rst": RstFormatter}[format]
