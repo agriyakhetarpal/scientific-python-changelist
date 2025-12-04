@@ -2,7 +2,7 @@ import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Union
+from typing import Optional, Union
 
 from github.NamedUser import NamedUser
 from github.PullRequest import PullRequest
@@ -27,7 +27,7 @@ class ChangeNote:
         *,
         pr_summary_regex: str,
         pr_summary_label_regex: str,
-        ignore_prs_by_username: list[str] | None = None,
+        ignore_prs_by_username: Optional[list[str]] = None,
     ) -> "set[ChangeNote]":
         """Create a set of notes from pull requests.
 
